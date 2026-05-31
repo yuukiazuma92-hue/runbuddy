@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#27ae60">
+<title>RunBuddy 🐰</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --g1:#27ae60;--g2:#1e8449;--g3:#82e0aa;
+  --bg:#f2f6f2;--card:#fff;--text:#1a2e1a;--sub:#6b8f71;
+  --border:#dce8dc;--accent:#e67e22;--red:#e74c3c;--blue:#2980b9;
+  --nav:60px;--safe:env(safe-area-inset-bottom,0px)
+}
+html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;color:var(--text);overscroll-behavior:none}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav) + var(--safe) + 24px)}
+.hd{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;padding:16px;padding-top:max(16px,env(safe-area-inset-top,16px))}
+.hd h1{font-size:20px;font-weight:800}
+.hd p{font-size:12px;opacity:.75;margin-top:2px}
+.hd-row{display:flex;justify-content:space-between;align-items:center}
+.nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav) + var(--safe));background:#fff;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:var(--safe)}
+.nitflex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;font-size:10px;font-weight:600;color:var(--sub);padding:6px 0;transition:color .15s}
+.ni.on{color:var(--g1)}
+.ni-ic{font-size:22px;line-height:1}
+.card{background:var(--card);border-radius:18px;padding:16px;margin:10px 14px 0;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.sr{display:flex;gap:8px;margin:10px 14px 0}
+.sc{flex:1;background:var(--card);border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.sv{font-size:20px;font-weight:800;color:var(--g1);line-height:1}
+.sl{font-size:10px;color:var(--sub);margin-top:4px;font-weight:600}
+.bp{background:var(--g1);color:#fff;border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:700;width:100%;cursor:pointer;transition:background .15s}
+.bp:active{background:var(--g2)}
+.bp.blue{background:var(--blue)}
+.bp.blue:active{background:#1a5f7a}
+.bs{background:var(--bg);color:var(--text);border:2px solid var(--border);border-radius:12px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer}
+.bs.on{border-color:var(--g1);color:var(--g1);background:#edfaf3}
+.bd{background:#fff5f5;color:var(--red);border:none;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer}
+.ri{display:flex;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.ri:last-child{border:none}
+.ric{width:38px;height:38px;background:#edfaf3;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;margin-right:12px;flex-shrink:0}
+.rin{flex:1;min-width:0}
+.rit{font-weight:700;font-size:14px}
+.ris{font-size:12px;color:var(--sub);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rid{font-weight:800;color:var(--g1);font-size:15px;white-space:nowrap}
+.fg{margin-bottom:14px}
+.fl{font-size:12px;font-weight:700;color:var(--sub);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.4px}
+.fi{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:12px;font-size:16px;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;-webkit-appearance:none}
+.fi:focus{border-color:var(--g1);background:#fff}
+.tb{display:flex;gap:6px;padding:10px 14px 0}
+.tt{flex:1;text-align:center;padding:8px 4px;border-radius:10px;font-size:12px;font-weight:700;color:var(--sub);cursor:pointer;transition:all .15s}
+.tt.on{background:var(--g1);color:#fff}
+.pw{background:var(--border);border-radius:99px;height:8px;overflow:hidden;margin:8px 0}
+.pf{height:100%;background:linear-gradient(90deg,var(--g1),var(--g3));border-radius:99px;transition:width .5s}
+.cw{overflow-x:auto;padding-bottom:4px}
+.ci{display:flex;align-items:flex-end;gap:5px;height:130px;padding:0 2px;min-width:max-content}
+.bc{display:flex;flex-direction:column;align-items:center;gap:3px;width:38px}
+.bb{width:30px;background:linear-gradient(180deg,var(--g3),var(--g1));border-radius:5px 5px 0 0;min-height:2px}
+.bl{font-size:10px;color:var(--sub);white-space:nowrap}
+.bv{font-size:10px;color:var(--g1);font-weight:800}
+.ua{border:2.5px dashed var(--g1);border-radius:16px;padding:28px 16px;text-align:center;cursor:pointer;background:#fafff9}
+.ua:active{background:#edfaf3}
+.ce{font-size:86px;line-height:1;display:inline-block;animation:hop 2.2s ease-in-out infinite}
+@keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.toast{position:fixed;top:max(20px,env(safe-area-inset-top,20px));left:50%;transform:translateX(-50%) translateY(-10px);background:#1a2e1a;color:#fff;padding:10px 20px;border-radius:99px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.sec{font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;padding:14px 14px 0}
+.empty{text-align:center;padding:40px 20px;color:var(--sub)}
+.row{display:flex;justify-content:space-between;align-items:center}
+.step{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.step-n{background:var(--g1);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:1px}
+.goal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.evo-item{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.evo-item:last-child{border:none}
+.strava-box{background:linear-gradient(135deg,#fc4c02,#e34400);color:#fff;border-radius:16px;padding:16px;margin:10px 14px 0}
+.strava-connected{display:flex;align-items:center;gap:10px}
+.link{color:var(--g1);font-weight:700;font-size:13px;cursor:pointer;text-align:center;padding-top:10px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700}
+.chip-s{background:#fc4c02;color:#fff}
+.chip-g{background:#007cc3;color:#fff}
+.chip-m{background:#e8f0e8;color:var(--sub)}
+.spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.conn-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border-radius:10px;padding:6px 12px;font-size:13px;font-weight:700}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+<script>
+// ── STORAGE ────────────────────────────────────────────────────
+const KEY='rb_v3',STR_KEY='rb_strava';
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||base();}catch(e){return base();}}
+function base(){return{runs:[],goals:{weekly:20,monthly:80}};}
+function save(d){localStorage.setItem(KEY,JSON.stringify(d));}
+function get_strava(){try{return JSON.parse(localStorage.getItem(STR_KEY))||{};}catch(e){return{};}}
+function save_strava(d){localStorage.setItem(STR_KEY,JSON.stringify(d));}
+
+// ── STATE ──────────────────────────────────────────────────────
+let S=load(), tab='home', stats_period='month', confirm_del=null, log_mode='strava', edit_goals=false, syncing=false;
+
+// ── TOAST ──────────────────────────────────────────────────────
+let _tt;
+function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('on');clearTimeout(_tt);_tt=setTimeout(()=>e.classList.remove('on'),2800);}
+
+// ── HELPERS ────────────────────────────────────────────────────
+function fmt_pace(s){if(!s||s<=0)return"--'--\"";return Math.floor(s/60)+"'"+String(Math.round(s%60)).padStart(2,'0')+'"';}
+function fmt_dur(s){if(!s)return'0:00';const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=Math.round(s%60);return h?`${h}:${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`:`${m}:${String(ss).padStart(2,'0')}`;}
+function fmt_date(d){const dt=new Date(d+'T00:00:00'),w=['日','月','火','水','木','金','土'];return`${dt.getMonth()+1}/${dt.getDate()}（${w[dt.getDay()]}）`;}
+function today(){return new Date().toISOString().slice(0,10);}
+function week_start(){const d=new Date(),day=d.getDay(),diff=d.getDate()-day+(day===0?-6:1);return new Date(new Date().setDate(diff)).toISOString().slice(0,10);}
+function month_start(){const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`;}
+function year_start(){return`${new Date().getFullYear()}-01-01`;}
+function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36);}
+
+// ── GPX/TCX PARSER ────────────────────────────────────────────
+function hav(a,b,c,d){const R=6371,dr=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180,x=Math.sin(dr/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dl/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
+function parse_gpx(txt){
+  const doc=new DOMParser().parseFromString(txt,'application/xml');
+  const pts=Array.from(doc.querySelectorAll('trkpt'));
+  if(!pts.length)return null;
+  const ps=pts.map(p=>({lat:parseFloat(p.getAttribute('lat')),lon:parseFloat(p.getAttribute('lon')),t:new Date(p.querySelector('time')?.textContent||0)})).filter(p=>!isNaN(p.lat)&&p.t>0);
+  if(ps.length<2)return null;
+  let dist=0;for(let i=1;i<ps.length;i++)dist+=hav(ps[i-1].lat,ps[i-1].lon,ps[i].lat,ps[i].lon);
+  dist=Math.round(dist*100)/100;
+  const dur=Math.round((ps[ps.length-1].t-ps[0].t)/1000);
+  const name=doc.querySelector('name')?.textContent||'GPX';
+  return{id:uid(),date:ps[0].t.toISOString().slice(0,10),distance:dist,duration:dur,pace:dist>0?Math.round(dur/dist):0,calories:Math.round(dist*65),note:name,source:'garmin'};
+}
+function parse_tcx(txt){
+  const doc=new DOMParser().parseFromString(txt,'application/xml');
+  const laps=Array.from(doc.querySelectorAll('Lap'));if(!laps.length)return null;
+  let td=0,tt=0,tc=0;
+  const start=doc.querySelector('Activity > Id')?.textContent||new Date().toISOString();
+  laps.forEach(l=>{td+=parseFloat(l.querySelector('DistanceMeters')?.textContent||0);tt+=parseFloat(l.querySelector('TotalTimeSeconds')?.textContent||0);tc+=parseFloat(l.querySelector('Calories')?.textContent||0);});
+  const km=Math.round(td/10)/100,dur=Math.round(tt);
+  return{id:uid(),date:start.slice(0,10),distance:km,duration:dur,pace:km>0?Math.round(dur/km):0,calories:Math.round(tc)||Math.round(km*65),note:'Garmin TCX',source:'garmin'};
+}
+
+// ── STRAVA API ─────────────────────────────────────────────────
+const AUTH_URL='https://www.strava.com/oauth/authorize';
+const TOKEN_PROXY='/api/strava-token';
+const ACT_URL='https://www.strava.com/api/v3/athlete/activities';
+
+function strava_cfg(){return get_strava().config||{};}
+function strava_tokens(){return get_strava().tokens||{};}
+function strava_connected(){const t=strava_tokens();return!!t.access_token;}
+function strava_athlete(){return get_strava().athlete||null;}
+
+function strava_login(){
+  const cfg=strava_cfg();
+  if(!cfg.client_id){toast('❌ Client ID を設定してください');tab='settings';render();return;}
+  const redirect=window.location.origin+window.location.pathname;
+  const p=new URLSearchParams({client_id:cfg.client_id,redirect_uri:redirect,response_type:'code',scope:'activity:read_all',approval_prompt:'auto'});
+  window.location.href=AUTH_URL+'?'+p;
+}
+
+async function exchange_code(code){
+  const cfg=strava_cfg();
+  const r=await fetch(TOKEN_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:cfg.client_id,client_secret:cfg.client_secret,code,grant_type:'authorization_code'})});
+  return r.json();
+}
+
+async function ensure_token(){
+  let d=get_strava();
+  const t=d.tokens||{};
+  if(!t.access_token)throw new Error('Not connected');
+  if(t.expires_at<Date.now()/1000-60){
+    const cfg=strava_cfg();
+    const r=await fetch(TOKEN_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:cfg.client_id,client_secret:cfg.client_secret,refresh_token:t.refresh_token,grant_type:'refresh_token'})});
+    const fresh=await r.json();
+    if(fresh.access_token){d.tokens=fresh;save_strava(d);}
+    return fresh.access_token;
+  }
+  return t.access_token;
+}
+
+function strava_run(a){
+  if(a.type!=='Run'&&a.sport_type!=='Run')return null;
+  const km=Math.round(a.distance/10)/100;
+  return{id:'strava_'+a.id,date:(a.start_date_local||a.start_date).slice(0,10),distance:km,duration:a.moving_time,pace:km>0?Math.round(a.moving_time/km):0,calories:Math.round((a.kilojoules||0)*0.239)||Math.round(km*65),note:a.name||'Run',source:'strava'};
+}
+
+async function sync_strava(){
+  if(syncing)return;
+  syncing=true;render();
+  try{
+    const token=await ensure_token();
+    // Fetch up to 200 activities (4 pages of 50)
+    let all=[];
+    for(let page=1;page<=4;page++){
+      const r=await fetch(`${ACT_URL}?per_page=50&page=${page}`,{headers:{Authorization:'Bearer '+token}});
+      const acts=await r.json();
+      if(!Array.isArray(acts)||!acts.length)break;
+      all=[...all,...acts];
+      if(acts.length<50)break;
+    }
+    const runs=all.map(strava_run).filter(Boolean);
+    // Merge: keep existing manual/garmin runs, add new strava runs
+    const existingIds=new Set(S.runs.filter(r=>r.source==='strava').map(r=>r.id));
+    const newRuns=runs.filter(r=>!existingIds.has(r.id));
+    const nonStrava=S.runs.filter(r=>r.source!=='strava');
+    S.runs=[...runs,...nonStrava].sort((a,b)=>b.date.localeCompare(a.date));
+    save(S);
+    toast(`✅ ${runs.length}件のランを同期しました`);
+  }catch(e){
+    toast('❌ 同期失敗: '+e.message);
+  }
+  syncing=false;render();
+}
+
+// Check OAuth callback on load
+(async function(){
+  const p=new URLSearchParams(window.location.search);
+  const code=p.get('code'),err=p.get('error');
+  if(err){toast('❌ Strava 認証がキャンセルされました');window.history.replaceState({},'',window.location.pathname);return;}
+  if(code){
+    window.history.replaceState({},'',window.location.pathname);
+    toast('⏳ Strava に接続中...');
+    try{
+      const data=await exchange_code(code);
+      if(data.access_token){
+        const d=get_strava();
+        d.tokens=data;
+        d.athlete=data.athlete;
+        save_strava(d);
+        toast('✅ Strava 連携完了！同期します...');
+        render();
+        await sync_strava();
+      }else{
+        toast('❌ 連携失敗: '+JSON.stringify(data));
+      }
+    }catch(e){toast('❌ 連携失敗: '+e.message);}
+  }
+})();
+
+// ── CHARACTER ─────────────────────────────────────────────────
+const STAGES=[
+  {min:0,e:'🥚',n:'たまご',d:'まだ眠ってる...'},
+  {min:1,e:'🐣',n:'うまれたて',d:'はじめの一歩！'},
+  {min:15,e:'🐰',n:'こうさぎ',d:'走り始めたよ！'},
+  {min:50,e:'🐇',n:'うさぎ',d:'かなり走れるね！'},
+  {min:100,e:'🏃🐇',n:'ランナーうさぎ',d:'ランニング大好き！'},
+  {min:200,e:'⚡🐇',n:'スピードうさぎ',d:'すごいスピード！'},
+  {min:500,e:'🌟🐇',n:'スターうさぎ',d:'走ることの達人！'},
+  {min:1000,e:'🏆🐇',n:'チャンピオン',d:'伝説のランナー！'},
+];
+function get_stage(km){for(let i=STAGES.length-1;i>=0;i--)if(km>=STAGES[i].min)return STAGES[i];return STAGES[0];}
+function get_level(km){return Math.min(100,Math.floor(Math.sqrt(km)*3)+1);}
+function get_prog(km){const s=get_stage(km),si=STAGES.indexOf(s),nx=STAGES[si+1];if(!nx)return 100;return Math.min(100,Math.round(((km-s.min)/(nx.min-s.min))*100));}
+
+// ── RENDER ────────────────────────────────────────────────────
+function render(){
+  document.getElementById('app').innerHTML=`
+<div class="screen" id="scr">${html_screen()}</div>
+<nav class="nav">
+  ${[['home','🏠','ホーム'],['log','➕','記録'],['stats','📊','統計'],['char','🐰','キャラ'],['settings','⚙️','設定']].map(([id,ic,lb])=>`<div class="ni${tab===id?' on':''}" data-tab="${id}"><span class="ni-ic">${ic}</span>${lb}</div>`).join('')}
+</nav>`;
+  bind();
+}
+
+function html_screen(){
+  if(tab==='home')    return html_home();
+  if(tab==='log')     return html_log();
+  if(tab==='stats')   return html_stats();
+  if(tab==='char')    return html_char();
+  if(tab==='settings')return html_settings();
+  return '';
+}
+
+// ── HOME ──────────────────────────────────────────────────────
+function html_home(){
+  const runs=S.runs,goals=S.goals,td=today(),ws=week_start(),ms=month_start();
+  const t_km=runs.filter(r=>r.date===td).reduce((s,r)=>s+r.distance,0);
+  const w_km=runs.filter(r=>r.date>=ws).reduce((s,r)=>s+r.distance,0);
+  const m_km=runs.filter(r=>r.date>=ms).reduce((s,r)=>s+r.distance,0);
+  const total=runs.reduce((s,r)=>s+r.distance,0);
+  const stage=get_stage(total);
+  let streak=0;
+  const dates=[...new Set(runs.map(r=>r.date))].sort().reverse();
+  if(dates.length){let chk=new Date();for(const ds of dates){const diff=Math.round((chk-new Date(ds+'T00:00:00'))/86400000);if(diff<=1){streak++;chk=new Date(ds+'T00:00:00');}else break;}}
+  const wp=Math.min(100,(w_km/(goals.weekly||20))*100);
+  const mp=Math.min(100,(m_km/(goals.monthly||80))*100);
+  const con=strava_connected(),ath=strava_athlete();
+  return`
+<div class="hd">
+  <div class="hd-row">
+    <div><h1>${stage.e} RunBuddy</h1><p>${new Date().toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'})}</p></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      ${streak>=2?`<div style="background:rgba(255,255,255,.15);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:800;color:#f1c40f">${streak}🔥</div>`:''}
+      ${con?`<button id="btn-sync" class="conn-badge" style="cursor:pointer;border:none">${syncing?'<span class="spinner"></span>':'🔄'} 同期</button>`:`<button id="btn-connect" class="conn-badge" style="cursor:pointer;border:none;background:rgba(252,76,2,.5)">Strava 接続</button>`}
+    </div>
+  </div>
+</div>
+${con?`<div style="padding:8px 14px 0"><div style="background:#edfaf3;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px"><span style="font-size:18px">✅</span><span style="font-weight:700;font-size:13px">Strava ${ath?ath.firstname+' '+ath.lastname:''} 連携中</span></div></div>`:''}
+<div class="sr">
+  <div class="sc"><div class="sv">${t_km>0?t_km.toFixed(1):'--'}</div><div class="sl">今日(km)</div></div>
+  <div class="sc"><div class="sv">${w_km.toFixed(1)}</div><div class="sl">今週(km)</div></div>
+  <div class="sc"><div class="sv">${m_km.toFixed(1)}</div><div class="sl">今月(km)</div></div>
+</div>
+<div class="card">
+  <div class="goal-row"><span style="font-weight:700;font-size:14px">📅 週間目標</span><span style="font-size:13px;color:var(--sub)">${w_km.toFixed(1)} / ${goals.weekly}km</span></div>
+  <div class="pw"><div class="pf" style="width:${wp}%"></div></div>
+  <div class="goal-row"><span style="font-weight:700;font-size:14px">📆 月間目標</span><span style="font-size:13px;color:var(--sub)">${m_km.toFixed(1)} / ${goals.monthly}km</span></div>
+  <div class="pw"><div class="pf" style="width:${mp}%"></div></div>
+</div>
+<p class="sec">最近のラン</p>
+<div class="card">
+  ${runs.length===0
+    ?`<div class="empty"><div style="font-size:44px;margin-bottom:10px">🐰</div><div style="font-weight:700">${con?'「同期」ボタンを押してデータを取得しよう':'Stravaを連携してランデータを取得しよう'}</div></div>`
+    :runs.slice(0,6).map(r=>`
+<div class="ri">
+  <div class="ric">${r.source==='strava'?'🏃':r.source==='garmin'?'🎽':'✏️'}</div>
+  <div class="rin">
+    <div class="rit">${fmt_date(r.date)}</div>
+    <div class="ris">${fmt_dur(r.duration)} · ${fmt_pace(r.pace)}/km${r.note?` · ${r.note}`:''}</div>
+  </div>
+  <div style="text-align:right">
+    <div class="rid">${r.distance.toFixed(2)}km</div>
+    <span class="chip chip-${r.source==='strava'?'s':r.source==='garmin'?'g':'m'}">${r.source==='strava'?'Strava':r.source==='garmin'?'Garmin':'同期g}</span>
+  </div>
+</div>`).join('')}
+  ${runs.length>6?`<div class="link" data-tab="stats">すぽて見る（${runs.length}件）→</div>`:''}
+</div>
+<div style="height:8px"></div>`;
+}
+
+// ── LOG ───────────────────────────────────────────────────────
+function html_log(){
+  return`
+<div class="hd"><h1>📝 記録を追加</h1><p>Strava同期 or 手動入力</p></div>
+<div style="display:flex;gap:8px;padding:10px 14px 0">
+  <button class="bs${log_mode==='strava'?' on':''}" id="lm-strava" style="flex:1">🔄 Strava同期</button>
+  <button class="bs${log_mode==='manual'?' on':''}" id="lm-manual" style="flex:1">✏️ 手動</button>
+  <button class="bs${log_mode==='gpx'?' on':''}" id="lm-gpx" style="flex:1">📂 GPX</button>
+</div>
+${log_mode==='strava'?`
+<div class="card" style="margin-top:10px">
+  ${strava_connected()?`
+  <p style="font-weight:800;font-size:15px;margin-bottom:12px">✅ Strava 連携済み</p>
+  <p style="font-size:14px;color:var(--sub);margin-bottom:16px">ホーム画面の「🔄 同期」ボタン、または下のボタンで最新データを取得できます。</p>
+  <button class="bp" id="btn-sync2">${syncing?'<span class="spinner"></span> 同期中...':'🔄 今すあ同期する'}</button>
+  <p style="font-size:12px;color:var(--sub);margin-top:12px;text-align:center">⚡ ガーミンで走る → Strava自動同期 → ここで同期 → 完了！</p>
+  `:`
+  <p style="font-weight:800;font-size:15px;margin-bottom:12px">🔗 Strava を連携しよう</p>
+  <p style="font-size:14px;color:var(--sub);margin-bottom:8px">ガーミンのランが自動で入ります。設定は一回だけ。</p>
+  <div class="steps" style="margin-bottom:16px">
+    ${['Stravaアカウントを作る（無料）','ガーミンConnectでStrava連携をオンにする','「設定」タブでclient_idを入力する','Strava連携ボタンを押す'].map((s,i)=>`<div class="step"><span class="step-n">${i+1}</span><span style="font-size:13px">${s}</span></div>`).join('')}
+  </div>
+  <button class="bp blue" data-tab="settings">⚙️ 設定画面で連携する</button>`}
+</div>`
+:log_mode==='manual'?`
+<div class="card">
+  <div class="fg"><label class="fl">📅 日付</label><input class="fi" type="date" id="f-date" value="${today()}"></div>
+  <div class="fg"><label class="fl">📏 距離 (km)*</label><input class="fi" type="number" id="f-dist" placeholder="例: 5.20" step="0.01" inputmode="decimal"></div>
+  <div class="fg"><label class="fl">⏱ タイム（分：秒）</label>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input class="fi" type="number" id="f-min" placeholder="分" inputmode="numeric" style="text-align:center">
+      <span style="font-weight:800;font-size:20px;color:var(--sub)">:</span>
+      <input class="fi" type="number" id="f-sec" placeholder="秒" inputmode="numeric" style="text-align:center">
+    </div>
+  </div>
+  <div class="fg"><label class="fl">🔥 カロリー（空欄で自動）</label><input class="fi" type="number" id="f-cal" placeholder="kcal" inputmode="numeric"></div>
+  <div class="fg"><label class="fl">📝 メモ</label><input class="fi" type="text" id="f-note" placeholder="コース・体調など"></div>
+  <button class="bp" id="btn-save">💾 保存する</button>
+</div>`:`
+<div class="card">
+  <div class="ua" id="upload-area"><div style="font-size:44px;margin-bottom:6px">📂</div><div style="font-size:15px;font-weight:700">GPX / TCX ファイルを選抟</div><div style="font-size:12px;color:var(--sub);margin-top:3px">GarminConnect からエクスポート</div></div>
+  <input type="file" id="file-input" accept=".gpx,.tcx,.xml" style="display:none">
+</div>
+<div class="card">
+  ${['GarminConnectアプリを開く','インポートしたいアクティビティをタップ','「…」→「エクスポート」→「GPXをエクスポート」','上のエリアにファイルをアップロード'].map((s,i)=>`<div class="step"><span class="step-n">${i+1}</span><span style="font-size:13px">${s}</span></div>`).join('')}
+</div>`}`;
+}
+
+// ── STATS ─────────────────────────────────────────────────────
+function html_stats(){
+  const runs=S.runs;
+  const filtered=runs.filter(r=>stats_period==='week'?r.date>=week_start():stats_period==='month'?r.date>=month_start():stats_period==='year'?r.date>=year_start():true);
+  const total_km=filtered.reduce((s,r)=>s+r.distance,0);
+  const n=filtered.length;
+  const avg=n?total_km/n:0;
+  const wp=filtered.filter(r=>r.pace>0);
+  const avg_pace=wp.length?Math.round(wp.reduce((s,r)=>s+r.pace,0)/wp.length):0;
+  const now=new Date();
+  let chart=[];
+  if(stats_period==='week'){
+    const days=['月','火','水','木','金','土','日'],ws=new Date(week_start());
+    chart=days.map((l,i)=>{const d=new Date(ws);d.setDate(ws.getDate()+i);const ds=d.toISOString().slice(0,10);const km=runs.filter(r=>r.date===ds).reduce((s,r)=>s+r.distance,0);return{l,km:Math.round(km*10)/10};});
+  }else if(stats_period==='month'){
+    const ms=new Date(month_start()),me=new Date(now.getFullYear(),now.getMonth()+1,0);let cur=new Date(ms),w=1;
+    while(cur<=me){const s=cur.toISOString().slice(0,10),e=new Date(Math.min(+cur+6*86400000,+me)).toISOString().slice(0,10);const km=runs.filter(r=>r.date>=s&&r.date<=e).reduce((s2,r)=>s2+r.distance,0);chart.push({l:`${w}週`,km:Math.round(km*10)/10});cur.setDate(cur.getDate()+7);w++;}
+  }else if(stats_period==='year'){
+    chart=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'].map((l,i)=>{const m=String(i+1).padStart(2,'0');const km=runs.filter(r=>r.date.startsWith(`${now.getFullYear()}-${m}`)).reduce((s,r)=>s+r.distance,0);return{l,km:Math.round(km*10)/10};});
+  }else{
+    const years=[...new Set(runs.map(r=>r.date.slice(0,4)))].sort();if(!years.length)years.push(String(now.getFullYear()));
+    chart=years.map(y=>({l:y,km:Math.round(runs.filter(r=>r.date.startsWith(y)).reduce((s,r)=>s+r.distance,0)*10)/10}));
+  }
+  const mx=Math.max(...chart.map(d=>d.km),1);
+  return`
+<div class="hd"><h1>📊 統計</h1><p>あなたのランニング記録</p></div>
+<div class="tb">${[['week','今週'],['month','今月'],['year','今年'],['all','全期間']].map(([v,l])=>`<div class="tt${stats_period===v?' on':''}" data-period="${v}">${l}</div>`).join('')}</div>
+<div class="sr">
+  <div class="sc"><div class="sv">${total_km.toFixed(1)}</div><div class="sl">合計km</div></div>
+  <div class="sc"><div class="sv">${n}</div><div class="sl">回数</div></div>
+  <div class="sc"><div class="sv">${avg>0?avg.toFixed(1):'--'}</div><div class="sl">平均km</div></div>
+  <div class="sc"><div class="sv" style="font-size:13px">${fmt_pace(avg_pace)}</div><div class="sl">avgペース</div></div>
+</div>
+${chart.some(d=>d.km>0)?`<div class="card"><div class="cw"><div class="ci">${chart.map(d=>`<div class="bc"><div class="bv">${d.km>0?d.km:''}</div><div class="bb" style="height:${Math.max(2,d.km/mx*100)}px"></div><div class="bl">${d.l}</div></div>`).join('')}</div></div></div>`:''}
+<p class="sec">記録一覧</p>
+<div class="card">
+  ${filtered.length===0
+    ?`<div class="empty"><div style="font-size:44px;margin-bottom:10px">📭</div><div>この期間の記録はありません</div></div>`
+    :filtered.map(r=>`
+<div class="ri" id="run-${r.id}">
+  <div class="ric">${r.source==='strava'?'🏃':r.source==='garmin'?'🎽':'✏️'}</div>
+  <div class="rin"><div class="rit">${fmt_date(r.date)}</div><div class="ris">${fmt_dur(r.duration)} · ${fmt_pace(r.pace)}/km${r.calories?` · ${r.calories}kcal`:''}${r.note?` · ${r.note}`:''}</div></div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+    <div class="rid">${r.distance.toFixed(2)}km</div>
+    <button class="bd" data-del="${r.id}">${confirm_del===r.id?'✓確認削除':'削除'}</button>
+  </div>
+</div>`).join('')}
+</div><div style="height:8px"></div>`;
+}
+
+// ── CHARACTER ─────────────────────────────────────────────────
+function html_char(){
+  const total=S.runs.reduce((s,r)=>s+r.distance,0);
+  const stage=get_stage(total),lv=get_level(total),prog=get_prog(total);
+  const si=STAGES.indexOf(stage),nx=STAGES[si+1];
+  const best=S.runs.reduce((b,r)=>r.distance>(b?.distance||0)?r:b,null);
+  const goals=S.goals;
+  return`
+<div class="hd"><h1>🐰 キャラクター</h1><p>走って育てよう</p></div>
+<div class="card" style="text-align:center;padding:28px 16px">
+  <div class="ce">${stage.e}</div>
+  <div style="margin-top:14px">
+    <div style="font-size:12px;color:var(--sub);font-weight:700">Lv. ${lv}</div>
+    <div style="font-size:26px;font-weight:900;margin-top:2px">${stage.n}</div>
+    <div style="font-size:14px;color:var(--sub);margin-top:4px">${stage.d}</div>
+  </div>
+  <div style="padding:0 8px;margin-top:16px">
+    <div class="row" style="margin-bottom:4px">
+      <span style="font-size:12px;color:var(--sub)">次のステージまで</span>
+      <span style="font-size:12px;color:var(--g1);font-weight:800">${nx?`あと ${Math.max(0,nx.min-total).toFixed(1)}km`:'最高ステージ🏆'}</span>
+    </div>
+    <div class="pw"><div class="pf" style="width:${prog}%"></div></div>
+  </div>
+</div>
+<div class="sr">
+  <div class="sc"><div class="sv">${total.toFixed(0)}</div><div class="sl">総距離(km)</div></div>
+  <div class="sc"><div class="sv">${S.runs.length}</div><div class="sl">総回数</div></div>
+  <div class="sc"><div class="sv">${best?best.distance.toFixed(1):'--'}</div><div class="sl">最長(km)</div></div>
+</div>
+<p class="sec">進化の記録</p>
+<div class="card">
+  ${STAGES.map(s=>`<div class="evo-item" style="${total<s.min?'opacity:.3':''}"><span style="font-size:32px;width:40px;text-align:center">${s.e}</span><div style="flex:1"><div style="font-weight:800;font-size:15px">${s.n}</div><div style="font-size:12px;color:var(--sub)">${s.min>0?s.min+'km から':'スタート'}</div></div>${total>=s.min?'<span style="color:var(--g1);font-size:18px">✅</span>':'<span style="color:var(--sub)">🔒</span>'}</div>`).join('')}
+</div>
+<p class="sec">目標設定</p>
+<div class="card">
+  ${!edit_goals?`
+  <div class="row">
+    <div><div style="font-weight:700;font-size:15px">週間: ${goals.weekly}km</div><div style="font-weight:700;font-size:15px;margin-top:4px">月間: ${goals.monthly}km</div></div>
+    <button class="bs" id="btn-edit-goals">編集</button>
+  </div>`:`
+  <div class="fg"><label class="fl">週間目標 (km)</label><input class="fi" type="number" id="g-w" value="${goals.weekly}" inputmode="numeric"></div>
+  <div class="fg"><label class="fl">月間目標 (km)</label><input class="fi" type="number" id="g-m" value="${goals.monthly}" inputmode="numeric"></div>
+  <div style="display:flex;gap:8px"><button class="bp" id="btn-save-goals" style="flex:1">保存</button><button class="bs" id="btn-cancel-goals">キャンセル</button></div>`}
+</div><div style="height:8px"></div>`;
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────
+function html_settings(){
+  const cfg=strava_cfg(),con=strava_connected(),ath=strava_athlete();
+  return`
+<div class="hd"><h1>⚙️ 設定</h1><p>Strava連携・アカウント</p></div>
+<p class="sec">Strava 連携</p>
+${con?`
+<div class="card">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+    <div style="font-size:36px">${ath?.profile?`<img src="${ath.profile}" style="width:48px;height:48px;border-radius:50%">`:''} 🏃</div>
+    <div><div style="font-weight:800;font-size:16px">${ath?ath.firstname+' '+ath.lastname:'連携済み'}</div><div style="font-size:13px;color:var(--sub)">Strava アカウント連携済み</div></div>
+  </div>
+  <button class="bp" id="btn-sync3" style="margin-bottom:10px">${syncing?'<span class="spinner"></span> 同期中...':'🔄 ランを同期する'}</button>
+  <button class="bd" id="btn-disconnect" style="width:100%">🔌 連携を解除する</button>
+</div>`:`
+<div class="card">
+  <p style="font-size:14px;color:var(--sub);margin-bottom:16px">Strava APIアプリを作成して、以下に入力してください。</p>
+  <div class="fg"><label class="fl">Client ID</label><input class="fi" type="number" id="s-cid" placeholder="123456" value="${cfg.client_id||''}" inputmode="numeric"></div>
+  <div class="fg"><label class="fl">Client Secret</label><input class="fi" type="password" id="s-sec" placeholder="••••••••••••••••••••" value="${cfg.client_secret||''}"></div>
+  <button class="bp blue" id="btn-strava-login" style="margin-bottom:10px">🔗 Strava でログイン</button>
+</div>`}
+<p class="sec">Strava API アプリの作り方</p>
+<div class="card">
+  ${[
+    '<b>strava.com/settings/api</b> にアクセス',
+    'アプリ名: RunBuddy（任意）',
+    'カテゴリ: Other',
+    'サイトURL: このアプリのURL（Vercelデプロイ後のURL）',
+    'コールバックドメイン: このアプリのドメイン',
+    'Client IDとClient Secretをコピーして上に貼り付け',
+  ].map((s,i)=>`<div class="step"><span class="step-n">${i+1}</span><span style="font-size:13px;line-height:1.5">${s}</span></div>`).join('')}
+  <div style="margin-top:12px;padding:10px;background:#f0faf0;border-radius:10px;font-size:13px">
+    💡 <b>ガーミン連携の流れ：</b><br>
+    ガーミン → GarminConnect自動同期 → Strava自動連携 → RunBuddy同期ボタン
+  </div>
+</div>
+<p class="sec">データ</p>
+<div class="card">
+  <div style="font-size:14px;margin-bottom:12px">記録数: <b>${S.runs.length}件</b></div>
+  <button class="bd" id="btn-clear-data" style="width:100%">⚠️ すぽてのデータを削除</button>
+</div>
+<div style="height:8px"></div>`;
+}
+
+// ── BIND ─────────────────────────────────────────────────────
+function bind(){
+  // Tab nav
+  document.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>{tab=el.dataset.tab;confirm_del=null;render();}));
+  // Period
+  document.querySelectorAll('[data-period]').forEach(el=>el.addEventListener('click',()=>{stats_period=el.dataset.period;confirm_del=null;render();}));
+  // Sync buttons
+  ['btn-sync','btn-sync2','btn-sync3'].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener('click',()=>sync_strava());});
+  // Connect
+  const bc=document.getElementById('btn-connect');if(bc)bc.addEventListener('click',strava_login);
+  // Strava login
+  const bsl=document.getElementById('btn-strava-login');
+  if(bsl)bpl.addEventListener('click',()=>{
+    const cid=document.getElementById('s-cid')?.value;
+    const sec=document.getElementById('s-sec')?.value;
+    if(!cid){toast('❌ Client IDを入力してください');return;}
+    if(!sec){toast('❌ Client Secretを入力してください');return;}
+    const d=get_strava();d.config={client_id:cid,client_secret:sec};save_strava(d);
+    strava_login();
+  });
+  // Disconnect
+  const bd=document.getElementById('btn-disconnect');
+  if(bd)bd.addEventListener('click',()=>{if(confirm('Strava連携を解除しますか？')){localStorage.removeItem(STR_KEY);toast('連携を解除しました');render();}});
+  // Log mode
+  ['strava','manual','gpx'].forEach(m=>{const b=document.getElementById('lm-'+m);if(b)b.addEventListener('click',()=>{log_mode=m;render();});});
+  // Manual save
+  const bs=document.getElementById('btn-save');
+  if(bs)bs.addEventListener('click',()=>{
+    const dist=parseFloat(document.getElementById('f-dist')?.value||0);
+    if(!dist||dist<=0){toast('❌ 距離を入力してください');return;}
+    const mins=parseInt(document.getElementById('f-min')?.value||0),secs=parseInt(document.getElementById('f-sec')?.value||0),dur=mins*60+secs;
+    const cal=parseInt(document.getElementById('f-cal')?.value||0)||Math.round(dist*65);
+    S.runs.unshift({id:uid(),date:document.getElementById('f-date')?.value||today(),distance:dist,duration:dur,pace:dist>0&&dur>0?Math.round(dur/dist):0,calories:cal,note:document.getElementById('f-note')?.value||'',source:'manual'});
+    save(S);toast('✅ 記録しました！');tab='home';render();
+  });
+  // GPX upload
+  const ua=document.getElementById('upload-area'),fi=document.getElementById('file-input');
+  if(ua&&fi){
+    ua.addEventListener('click',()=>fi.click());
+    fi.addEventListener('change',e=>{
+      const file=e.target.files[0];if(!file)return;
+      const reader=new FileReader();
+      reader.onload=ev=>{
+        let run=file.name.toLowerCase().endsWith('.gpx')?parse_gpx(ev.target.result):parse_tcx(ev.target.result);
+        if(run&&run.distance>0){S.runs.unshift(run);save(S);toast('✅ 読み込みました '+run.distance.toFixed(2)+'km');tab='home';render();}
+        else{toast('❌ ファイルを読み込めませんでした');render();}
+      };
+      reader.readAsText(file);
+    });
+  }
+  // Delete
+  document.querySelectorAll('[data-del]').forEach(el=>el.addEventListener('click',()=>{
+    const id=el.dataset.del;
+    if(confirm_del===id){S.runs=S.runs.filter(r=>r.id!==id);save(S);confirm_del=null;toast('🗑 削除しました');render();}
+    else{confirm_del=id;render();setTimeout(()=>{const r=document.getElementById('run-'+id);if(r)r.scrollIntoView({block:'nearest'});},50);}
+  }));
+  // Goals
+  const beg=document.getElementById('btn-edit-goals');if(beg)beg.addEventListener('click',()=>{edit_goals=true;render();});
+  const bsg=document.getElementById('btn-save-goals');
+  if(bsg)bsg.addEventListener('click',()=>{
+    const w=parseFloat(document.getElementById('g-w')?.value||20),m=parseFloat(document.getElementById('g-m')?.value||80);
+    S.goals={weekly:w,monthly:m};save(S);edit_goals=false;toast('✅ 目標を保存しました');render();
+  });
+  const bcg=document.getElementById('btn-cancel-goals');if(bcg)bcg.addEventListener('click',()=>{edit_goals=false;render();});
+  // Clear data
+  const bcd=document.getElementById('btn-clear-data');
+  if(bcd)bcd.addEventListener('click',()=>{if(confirm('本当にすべてのデータを削除しますか？')){S=base();save(S);toast('🗑 データを削除しました');render();}});
+}
+
+render();
+</script>
+</body>
+</html>
