@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "outputDirectory": ".",
   "builds": [
     {
       "src": "api/*.js",
@@ -19,6 +18,9 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
