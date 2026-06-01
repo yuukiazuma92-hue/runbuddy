@@ -2,93 +2,62 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#27ae60">
-<title>RunBuddy 🐰</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RunBuddy</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --g1:#27ae60;--g2:#1e8449;--g3:#82e0aa;
-  --bg:#f2f6f2;--card:#fff;--text:#1a2e1a;--sub:#6b8f71;
-  --border:#dce8dc;--accent:#e67e22;--red:#e74c3c;--blue:#2980b9;
-  --nav:60px;--safe:env(safe-area-inset-bottom,0px)
-}
-html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;color:var(--text);overscroll-behavior:none}
-#app{display:flex;flex-direction:column;height:100vh;height:100dvh}
-.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav) + var(--safe) + 24px)}
-.hd{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;padding:16px;padding-top:max(16px,env(safe-area-inset-top,16px))}
-.hd h1{font-size:20px;font-weight:800}
-.hd p{font-size:12px;opacity:.75;margin-top:2px}
-.hd-row{display:flex;justify-content:space-between;align-items:center}
-.nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav) + var(--safe));background:#fff;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:var(--safe)}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;font-size:10px;font-weight:600;color:var(--sub);padding:6px 0;transition:color .15s}
-.ni.on{color:var(--g1)}
-.ni-ic{font-size:22px;line-height:1}
-.card{background:var(--card);border-radius:18px;padding:16px;margin:10px 14px 0;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.sr{display:flex;gap:8px;margin:10px 14px 0}
-.sc{flex:1;background:var(--card);border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.sv{font-size:20px;font-weight:800;color:var(--g1);line-height:1}
-.sl{font-size:10px;color:var(--sub);margin-top:4px;font-weight:600}
-.bp{background:var(--g1);color:#fff;border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:700;width:100%;cursor:pointer;transition:background .15s}
-.bp:active{background:var(--g2)}
-.bp.blue{background:var(--blue)}
-.bp.blue:active{background:#1a5f7a}
-.bs{background:var(--bg);color:var(--text);border:2px solid var(--border);border-radius:12px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer}
-.bs.on{border-color:var(--g1);color:var(--g1);background:#edfaf3}
-.bd{background:#fff5f5;color:var(--red);border:none;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer}
-.ri{display:flex;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
-.ri:last-child{border:none}
-.ric{width:38px;height:38px;background:#edfaf3;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;margin-right:12px;flex-shrink:0}
-.rin{flex:1;min-width:0}
-.rit{font-weight:700;font-size:14px}
-.ris{font-size:12px;color:var(--sub);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rid{font-weight:800;color:var(--g1);font-size:15px;white-space:nowrap}
-.fg{margin-bottom:14px}
-.fl{font-size:12px;font-weight:700;color:var(--sub);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.4px}
-.fi{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:12px;font-size:16px;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;-webkit-appearance:none}
-.fi:focus{border-color:var(--g1);background:#fff}
-.tb{display:flex;gap:6px;padding:10px 14px 0}
-.tt{flex:1;text-align:center;padding:8px 4px;border-radius:10px;font-size:12px;font-weight:700;color:var(--sub);cursor:pointer;transition:all .15s}
-.tt.on{background:var(--g1);color:#fff}
-.pw{background:var(--border);border-radius:99px;height:8px;overflow:hidden;margin:8px 0}
-.pf{height:100%;background:linear-gradient(90deg,var(--g1),var(--g3));border-radius:99px;transition:width .5s}
-.cw{overflow-x:auto;padding-bottom:4px}
-.ci{display:flex;align-items:flex-end;gap:5px;height:130px;padding:0 2px;min-width:max-content}
-.bc{display:flex;flex-direction:column;align-items:center;gap:3px;width:38px}
-.bb{width:30px;background:linear-gradient(180deg,var(--g3),var(--g1));border-radius:5px 5px 0 0;min-height:2px}
-.bl{font-size:10px;color:var(--sub);white-space:nowrap}
-.bv{font-size:10px;color:var(--g1);font-weight:800}
-.ua{border:2.5px dashed var(--g1);border-radius:16px;padding:28px 16px;text-align:center;cursor:pointer;background:#fafff9}
-.ua:active{background:#edfaf3}
-.ce{font-size:86px;line-height:1;display:inline-block;animation:hop 2.2s ease-in-out infinite}
-@keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-.toast{position:fixed;top:max(20px,env(safe-area-inset-top,20px));left:50%;transform:translateX(-50%) translateY(-10px);background:#1a2e1a;color:#fff;padding:10px 20px;border-radius:99px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.2)}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-.sec{font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;padding:14px 14px 0}
-.empty{text-align:center;padding:40px 20px;color:var(--sub)}
-.row{display:flex;justify-content:space-between;align-items:center}
-.step{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
-.step-n{background:var(--g1);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:1px}
-.goal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
-.evo-item{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
-.evo-item:last-child{border:none}
-.strava-box{background:linear-gradient(135deg,#fc4c02,#e34400);color:#fff;border-radius:16px;padding:16px;margin:10px 14px 0}
-.strava-connected{display:flex;align-items:center;gap:10px}
-.link{color:var(--g1);font-weight:700;font-size:13px;cursor:pointer;text-align:center;padding-top:10px}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700}
-.chip-s{background:#fc4c02;color:#fff}
-.chip-g{background:#007cc3;color:#fff}
-.chip-m{background:#e8f0e8;color:var(--sub)}
-.spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle}
-@keyframes spin{to{transform:rotate(360deg)}}
-.conn-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border-radius:10px;padding:6px 12px;font-size:13px;font-weight:700}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh;overflow-x:hidden}
+#app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;background:#111;overflow:hidden}
 </style>
 </head>
 <body>
-<div id="app"></div>
-<div class="toast" id="toast"></div>
+<div id="app"><div id="view"></div><nav id="nav"></nav></div>
 <script src="/app.js"></script>
+<script>
+// Patch: hardcoded Strava Client ID (secret is server-side only)
+const STRAVA_CLIENT_ID = '254019';
+const STRAVA_REDIRECT  = 'https://runbuddy-tau.vercel.app/';
+
+// Override strava_login to use hardcoded credentials
+window.strava_login = function() {
+  const url = 'https://www.strava.com/oauth/authorize'
+    + '?client_id=' + STRAVA_CLIENT_ID
+    + '&redirect_uri=' + encodeURIComponent(STRAVA_REDIRECT)
+    + '&response_type=code'
+    + '&approval_prompt=auto'
+    + '&scope=activity:read_all';
+  window.location.href = url;
+};
+
+// Override html_settings to hide Client ID / Secret fields
+window._orig_html_settings = window.html_settings;
+window.html_settings = function() {
+  const s = STATE.strava;
+  const connected = s && s.access_token;
+  return `
+    <div class="settings-section">
+      <h3>Strava連携</h3>
+      ${connected ? `
+        <div class="strava-connected">
+          <span class="badge-ok">✓ 連携済み</span>
+          <p style="font-size:12px;color:#aaa;margin-top:6px;">アスリート: ${s.athlete ? s.athlete.firstname + ' ' + s.athlete.lastname : ''}</p>
+          <button class="btn-secondary" onclick="strava_disconnect()" style="margin-top:10px;">連携解除</button>
+        </div>
+      ` : `
+        <p style="color:#aaa;font-size:13px;margin-bottom:12px;">Stravaアカウントと連携して、ランニングデータを自動同期できます。</p>
+        <button class="btn-primary strava-btn" onclick="strava_login()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right:6px;vertical-align:middle"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+          Stravaで連携
+        </button>
+      `}
+    </div>
+    <div class="settings-section">
+      <h3>データ管理</h3>
+      <button class="btn-secondary" onclick="export_data()">データをエクスポート</button>
+      <button class="btn-danger" onclick="clear_data()" style="margin-top:8px;">データを全削除</button>
+    </div>
+  `;
+};
+</script>
 </body>
 </html>
